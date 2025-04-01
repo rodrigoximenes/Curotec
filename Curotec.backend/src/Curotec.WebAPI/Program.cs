@@ -1,3 +1,11 @@
+using Curotec.Application.Mappers;
+using Curotec.Application.Services;
+using Curotec.Application.Services.Interfaces;
+using Curotec.Data;
+using Curotec.Data.Repository;
+using Curotec.Data.Repository.Interfaces;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +14,15 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
+builder.Services.AddDbContext<TodoDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+);
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<ITodoService, TodoService>();
+builder.Services.AddAutoMapper(typeof(DomainToViewModelMappingProfile), typeof(DTOsToDomainMappingProfile));
 
 var app = builder.Build();
 

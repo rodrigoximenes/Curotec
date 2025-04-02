@@ -8,7 +8,7 @@ services:
       ACCEPT_EULA: "Y"
       SA_PASSWORD: "@Password123!"
     ports:
-      - "1401:1433"
+      - "1433:1433" 
     volumes:
       - sqlserver-data:/var/opt/mssql
     networks:
@@ -21,6 +21,7 @@ services:
     container_name: webapi-container
     environment:
       ASPNETCORE_ENVIRONMENT: "Development"
+      DOTNET_RUNNING_IN_CONTAINER: "true" 
     ports:
       - "5000:80"
     depends_on:

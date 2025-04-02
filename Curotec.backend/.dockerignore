@@ -1,0 +1,16 @@
+# Ignorar arquivos binários e objetos gerados pelo build
+bin/
+obj/
+
+# Ignorar arquivos de configuração locais
+*.env
+
+# Ignorar arquivos de log
+*.log
+
+# Ignorar arquivos de dependências do frontend (caso esteja usando Node.js)
+node_modules/
+
+# Ignorar pastas do VSCode e IDEs
+.vscode/
+.idea/

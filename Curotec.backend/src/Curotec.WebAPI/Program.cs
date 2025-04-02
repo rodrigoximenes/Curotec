@@ -11,44 +11,57 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-string dbServer = Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true"
-    ? "sqlserver-container" 
-    : "localhost,1433";     
+if (Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
+{
+    builder.Configuration.AddJsonFile("appsettings.Docker.json", optional: true);
+}
 
-builder.Configuration["ConnectionStrings:DefaultConnection"] =
-    $"Server={dbServer};Database=master;User Id=sa;Password=@Password123!;TrustServerCertificate=True;";
-
-builder.Services.AddDbContext<TodoDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
-);
-
-// Configurações padrão
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-// Injeção de dependências
-builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-builder.Services.AddScoped<ITodoService, TodoService>();
-builder.Services.AddAutoMapper(typeof(DomainToViewModelMappingProfile), typeof(DTOsToDomainMappingProfile));
-builder.Services.AddValidatorsFromAssemblyContaining<TodoValidator>();
+ConfigureDatabase(builder);
+ConfigureServices(builder.Services);
+ConfigureSwagger(builder.Services);
 
 var app = builder.Build();
 
-// Configuração do pipeline de requisições
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Curotec API");
-        c.RoutePrefix = "";
-    });
-}
-
-app.UseHttpsRedirection();
-app.UseAuthorization();
-app.UseMiddleware<ExceptionHandlingMiddleware>();
-app.MapControllers();
+ConfigureMiddleware(app);
 
 app.Run();
+
+void ConfigureDatabase(WebApplicationBuilder builder)
+{
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+    builder.Services.AddDbContext<TodoDbContext>(options =>
+        options.UseSqlServer(connectionString));
+}
+
+void ConfigureServices(IServiceCollection services)
+{
+    services.AddControllers();
+    services.AddEndpointsApiExplorer();
+    services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+    services.AddScoped<ITodoService, TodoService>();
+    services.AddAutoMapper(typeof(DomainToViewModelMappingProfile), typeof(DTOsToDomainMappingProfile));
+    services.AddValidatorsFromAssemblyContaining<TodoValidator>();
+}
+
+void ConfigureSwagger(IServiceCollection services)
+{
+    services.AddSwaggerGen();
+}
+
+void ConfigureMiddleware(WebApplication app)
+{
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Curotec API");
+        });
+    }
+
+    app.UseHttpsRedirection();
+    app.UseAuthorization();
+    app.UseMiddleware<ExceptionHandlingMiddleware>();
+    app.MapControllers();
+}

@@ -38,17 +38,18 @@ To run the application locally, follow these steps:
    ```bash
    dotnet run --project ./Curotec.WebAPI/Curotec.WebAPI.csproj
    ```
-3. Access the application at: [https://localhost:7090/index.html](https://localhost:7090/index.html)
+3. Access the application at: [https://localhost:7090/swagger/index.html](https://localhost:7090/swagger/index.html)
 
 ### 4. Running via Docker
 Access the application via Docker at:
-- [http://localhost:5000/index.html](http://localhost:5000/index.html)
+- [http://localhost:5000/swagger/index.html](http://localhost:5000/swagger/index.html)
 
 ## Important Notes
 - Ensure the database container is running before applying migrations.
 - Both local and Dockerized setups connect to the same SQL Server database.
 - Migrations cannot be run before starting the database container.
 - Always run the migration from the "src" directory.
+- Both environments are sharing the same SQL Server database container.
 
 You're all set to explore the Curotec API! 🚀
 

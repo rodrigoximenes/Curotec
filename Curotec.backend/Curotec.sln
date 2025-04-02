@@ -3,13 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curotec.WebAPI", "src\Curotec.WebAPI\Curotec.WebAPI.csproj", "{3575211F-B5E0-4CD2-B947-3FEEFD2ECEE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Curotec.WebAPI", "src\Curotec.WebAPI\Curotec.WebAPI.csproj", "{3575211F-B5E0-4CD2-B947-3FEEFD2ECEE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curotec.Domain", "src\Curotec.Domain\Curotec.Domain.csproj", "{07195F4C-58A2-4744-BDA7-6A787E6AE4DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Curotec.Domain", "src\Curotec.Domain\Curotec.Domain.csproj", "{07195F4C-58A2-4744-BDA7-6A787E6AE4DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curotec.Data", "src\Curotec.Data\Curotec.Data.csproj", "{17FC3998-494C-4DCA-B331-7B37FB6F2D95}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Curotec.Data", "src\Curotec.Data\Curotec.Data.csproj", "{17FC3998-494C-4DCA-B331-7B37FB6F2D95}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curotec.Application", "src\Curotec.Application\Curotec.Application.csproj", "{9E890FFF-4AEE-4C3C-BC83-5614C3D0470E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Curotec.Application", "src\Curotec.Application\Curotec.Application.csproj", "{9E890FFF-4AEE-4C3C-BC83-5614C3D0470E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B9C87363-ABEA-48CD-8F23-589BB9E23C1E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curotec.Domain.Tests", "src\Curotec.Domain.Tests\Curotec.Domain.Tests.csproj", "{D4D9248C-404E-4307-919D-2039D1731A4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curotec.Application.Tests", "src\Curotec.Application.Tests\Curotec.Application.Tests.csproj", "{D12CC557-F8C3-4D65-92F5-770F095E3B07}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,9 +39,21 @@ Global
 		{9E890FFF-4AEE-4C3C-BC83-5614C3D0470E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E890FFF-4AEE-4C3C-BC83-5614C3D0470E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E890FFF-4AEE-4C3C-BC83-5614C3D0470E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4D9248C-404E-4307-919D-2039D1731A4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4D9248C-404E-4307-919D-2039D1731A4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4D9248C-404E-4307-919D-2039D1731A4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4D9248C-404E-4307-919D-2039D1731A4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D12CC557-F8C3-4D65-92F5-770F095E3B07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D12CC557-F8C3-4D65-92F5-770F095E3B07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D12CC557-F8C3-4D65-92F5-770F095E3B07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D12CC557-F8C3-4D65-92F5-770F095E3B07}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D4D9248C-404E-4307-919D-2039D1731A4A} = {B9C87363-ABEA-48CD-8F23-589BB9E23C1E}
+		{D12CC557-F8C3-4D65-92F5-770F095E3B07} = {B9C87363-ABEA-48CD-8F23-589BB9E23C1E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {27864749-F5A2-4505-80E4-D2BBA648AAC8}

@@ -16,6 +16,16 @@ if (Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
     builder.Configuration.AddJsonFile("appsettings.Docker.json", optional: true);
 }
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontEnd", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 ConfigureDatabase(builder);
 ConfigureServices(builder.Services);
 ConfigureSwagger(builder.Services);

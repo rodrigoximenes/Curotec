@@ -1,0 +1,10 @@
+<div class="todo-list">
+    <h2>Lista de Todos</h2>
+    <mat-list *ngIf="(todos$ | async) as todos">
+        <mat-list-item *ngFor="let todo of todos">
+            <h3 matLine>{{ todo.title }}</h3>
+            <p matLine>{{ todo.description }}</p>
+            <button mat-button color="warn" (click)="deleteTodo(todo.id)">Deletar</button>
+        </mat-list-item>
+    </mat-list>
+</div>

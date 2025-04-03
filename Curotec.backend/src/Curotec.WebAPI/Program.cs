@@ -18,13 +18,14 @@ if (Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontEnd", policy =>
+    options.AddPolicy("AllowAll", policy =>
     {
-        policy.WithOrigins("http://localhost:4200")
+        policy.AllowAnyOrigin()
               .AllowAnyMethod()
               .AllowAnyHeader();
     });
 });
+
 
 ConfigureDatabase(builder);
 ConfigureServices(builder.Services);
@@ -70,6 +71,7 @@ void ConfigureMiddleware(WebApplication app)
         });
     }
 
+    app.UseCors("AllowAll");
     app.UseHttpsRedirection();
     app.UseAuthorization();
     app.UseMiddleware<ExceptionHandlingMiddleware>();

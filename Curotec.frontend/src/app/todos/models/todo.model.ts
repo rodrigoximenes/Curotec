@@ -10,15 +10,16 @@ export interface Todo {
 }
 
 export enum TaskStatusEnum {
-    Pending = 'Pending',
-    InProgress = 'InProgress',
-    Completed = 'Completed',
-    Canceled = 'Canceled',
+    Pending = 0,
+    InProgress = 1,
+    Completed = 2,
+    Canceled = 3,
 }
 
 export enum TaskPriorityEnum {
-    Low = 'Low',
-    Medium = 'Medium',
-    High = 'High',
-    Critical = 'Critical',
+    Low = 0,
+    Medium = 1,
+    High = 2,
+    Critical = 3,
 }
+

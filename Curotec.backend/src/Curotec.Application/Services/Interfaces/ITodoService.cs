@@ -9,7 +9,7 @@ namespace Curotec.Application.Services.Interfaces
         Task<IEnumerable<TodoResponse>> GetAllAsync();
         Task<IEnumerable<TodoResponse>> FindByStatusAsync(TaskStatusEnum status);
         Task<TodoResponse> AddAsync(TodoRequest todoRequest);
-        Task UpdateAsync(Guid id, TodoRequest todoRequest);
+        Task<TodoResponse> UpdateAsync(Guid id, TodoRequest todoRequest);
         Task DeleteAsync(Guid id);
     }
 }

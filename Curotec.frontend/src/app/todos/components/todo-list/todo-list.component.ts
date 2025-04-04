@@ -25,7 +25,6 @@ import { selectTodos } from '../../store/todo.selectors';
     MatTableModule,
     MatButtonModule,
     DatePipe,
-    JsonPipe,
     MatCardModule,
     MatTooltipModule,
     MatIconModule

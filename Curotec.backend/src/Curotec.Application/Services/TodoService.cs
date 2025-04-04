@@ -50,15 +50,18 @@ namespace Curotec.Application.Services
             return _mapper.Map<TodoResponse>(todo);
         }
 
-        public async Task UpdateAsync(Guid id, TodoRequest todoRequest)
+        public async Task<TodoResponse> UpdateAsync(Guid id, TodoRequest request)
         {
-            var existingTodo = await _todoRepository.GetByIdAsync(id) ?? throw new KeyNotFoundException("TODO task not found");
+            var existingTodo = await _todoRepository.GetByIdAsync(id);
+            if (existingTodo == null) throw new KeyNotFoundException("Todo not found");
 
-            _mapper.Map(todoRequest, existingTodo);
+            _mapper.Map(request, existingTodo);
+
             var validationResult = await _todoValidator.ValidateAsync(existingTodo);
             if (!validationResult.IsValid) throw new ValidationException(validationResult.Errors);
 
             await _todoRepository.UpdateAsync(existingTodo);
+            return _mapper.Map<TodoResponse>(existingTodo);
         }
 
         public async Task DeleteAsync(Guid id)

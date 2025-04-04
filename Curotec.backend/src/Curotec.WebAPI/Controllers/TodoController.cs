@@ -43,18 +43,21 @@ namespace Curotec.WebAPI.Controllers
 
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new TODO task")]
-        public async Task<ActionResult> CreateTodo([FromBody] TodoRequest todoRequest)
+        public async Task<ActionResult<TodoResponse>> CreateTodo([FromBody] TodoRequest todoRequest)
         {
-            await _todoService.AddAsync(todoRequest);
-            return CreatedAtAction(nameof(GetAllTodos), null);
+            var createdTodo = await _todoService.AddAsync(todoRequest);
+            return CreatedAtAction(nameof(GetAllTodos), null, createdTodo);
         }
 
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update an existing TODO task")]
         public async Task<ActionResult> UpdateTodo(Guid id, [FromBody] TodoRequest todoRequest)
         {
-            await _todoService.UpdateAsync(id, todoRequest);
-            return NoContent();
+            var existingTodo = await _todoService.GetByIdAsync(id);
+            if (existingTodo == null) return NotFound($"TODO task with ID {id} not found.");
+
+            var updatedTodo = await _todoService.UpdateAsync(id, todoRequest);
+            return Ok(updatedTodo);
         }
 
         [HttpDelete("{id}")]

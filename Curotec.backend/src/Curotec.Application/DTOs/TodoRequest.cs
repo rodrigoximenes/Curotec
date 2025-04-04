@@ -16,6 +16,10 @@ namespace Curotec.Application.DTOs
         [Range((int)TaskPriorityEnum.Low, (int)TaskPriorityEnum.Critical, ErrorMessage = "Priority is invalid (Low = 0, Medium = 1, High = 2, Critical = 3.)")]
         public TaskPriorityEnum Priority { get; set; }
 
+        [Required(ErrorMessage = "Status is required.")]
+        [Range((int)TaskStatusEnum.Pending, (int)TaskStatusEnum.Canceled, ErrorMessage = "Status is invalid.(Pending = 0, InProgress = 1, Completed = 2, Canceled = 3.)")]
+        public TaskStatusEnum Status { get; set; }
+
         [Required(ErrorMessage = "Assignee is required.")]
         public string Assignee { get; set; }
     }

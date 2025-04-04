@@ -53,6 +53,13 @@ export class TodoFormComponent implements OnInit {
     .filter(key => !isNaN(Number(key)))
     .map(key => ({ key: Number(key), value: TaskStatusEnum[key as any] }));
 
+  errorMessages: { [key: string]: string } = {
+    title: 'Title is required.',
+    status: 'Status is required.',
+    priority: 'Priority is required.',
+    assignee: 'Assignee is required.',
+  };
+
   ngOnInit(): void {
     this.form = this.fb.group({
       title: ['', Validators.required],
@@ -80,6 +87,14 @@ export class TodoFormComponent implements OnInit {
         });
       }
     });
+  }
+
+  getErrorMessage(controlName: string): string | null {
+    const control = this.form.get(controlName);
+    if (control?.hasError('required')) {
+      return this.errorMessages[controlName] || 'This field is required.';
+    }
+    return null;
   }
 
   save(): void {

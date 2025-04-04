@@ -6,8 +6,8 @@
         <mat-form-field appearance="outline" class="full-width">
             <mat-label>Title</mat-label>
             <input matInput formControlName="title" required />
-            <mat-error *ngIf="form.get('title')?.hasError('required')">
-                Title is required.
+            <mat-error *ngIf="getErrorMessage('title')">
+                {{ getErrorMessage('title') }}
             </mat-error>
         </mat-form-field>
 
@@ -21,8 +21,8 @@
             <mat-select formControlName="status" required>
                 <mat-option *ngFor="let s of statuses" [value]="s.key">{{ s.value }}</mat-option>
             </mat-select>
-            <mat-error *ngIf="form.get('status')?.hasError('required')">
-                Status is required.
+            <mat-error *ngIf="getErrorMessage('status')">
+                {{ getErrorMessage('status') }}
             </mat-error>
         </mat-form-field>
 
@@ -31,24 +31,17 @@
             <mat-select formControlName="priority" required>
                 <mat-option *ngFor="let p of priorities" [value]="p.key">{{ p.value }}</mat-option>
             </mat-select>
-            <mat-error *ngIf="form.get('priority')?.hasError('required')">
-                Priority is required.
+            <mat-error *ngIf="getErrorMessage('priority')">
+                {{ getErrorMessage('priority') }}
             </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
             <mat-label>Assignee</mat-label>
             <input matInput formControlName="assignee" required />
-            <mat-error *ngIf="form.get('assignee')?.hasError('required')">
-                Assignee is required.
+            <mat-error *ngIf="getErrorMessage('assignee')">
+                {{ getErrorMessage('assignee') }}
             </mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Due Date</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="completionDate" />
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
 
         <mat-card-actions class="button-container">

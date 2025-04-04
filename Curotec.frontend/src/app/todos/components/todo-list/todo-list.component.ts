@@ -1,33 +1,92 @@
-import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { DatePipe, JsonPipe } from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatListModule } from '@angular/material/list';
-import { AsyncPipe, JsonPipe, NgFor, NgIf } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { MatDialog } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
+import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
 import { Todo } from '../../models/todo.model';
-import { loadTodos, deleteTodo } from '../../store/todo.actions';
+import { deleteTodo, loadTodos } from '../../store/todo.actions';
 import { selectTodos } from '../../store/todo.selectors';
-
 
 @Component({
   selector: 'app-todo-list',
   templateUrl: './todo-list.component.html',
   standalone: true,
   styleUrls: ['./todo-list.component.scss'],
-  imports: [MatButtonModule, MatListModule, NgIf, NgFor, AsyncPipe, JsonPipe]
+  imports: [
+    MatTableModule,
+    MatButtonModule,
+    DatePipe,
+    JsonPipe,
+    MatCardModule,
+    MatTooltipModule,
+    MatIconModule
+  ]
 })
-export class TodoListComponent implements OnInit {
+export class TodoListComponent implements OnInit, OnDestroy {
   todos$!: Observable<Todo[]>;
+  displayedColumns: string[] = ['title', 'description', 'status', 'priority', 'createdAt', 'completionDate', 'actions'];
 
-  constructor(private store: Store) { }
+  private unsubscribe$ = new Subject<void>();
+
+  readonly statusLabels: { [key: number]: string } = {
+    0: 'Pending',
+    1: 'In Progress',
+    2: 'Completed',
+    3: 'Canceled'
+  };
+
+  readonly priorityLabels: { [key: number]: string } = {
+    0: 'Low',
+    1: 'Medium',
+    2: 'High',
+    3: 'Critical'
+  };
+
+  constructor(
+    private store: Store,
+    private router: Router,
+    private dialog: MatDialog
+  ) { }
 
   ngOnInit(): void {
-    this.todos$ = this.store.select(selectTodos);
+    this.todos$ = this.store.select(selectTodos).pipe(takeUntil(this.unsubscribe$));
     this.store.dispatch(loadTodos());
   }
 
   deleteTodo(id: string): void {
-    this.store.dispatch(deleteTodo({ id }));
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: 'Confirm Deletion',
+        message: 'Are you sure you want to delete this task?'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.store.dispatch(deleteTodo({ id }));
+      }
+    });
+  }
+
+  goToNewTodo(): void {
+    this.router.navigate(['/todos/new']);
+  }
+
+  editTodo(id: string): void {
+    this.router.navigate(['/todos', id, 'edit']);
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

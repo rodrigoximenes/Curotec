@@ -1,25 +1,57 @@
 import { createReducer, on } from '@ngrx/store';
-import { loadTodosSuccess, addTodo, updateTodo, deleteTodo } from './todo.actions';
 import { Todo } from '../models/todo.model';
+import * as TodoActions from './todo.actions';
 
 export interface TodoState {
     todos: Todo[];
+    error: any;
 }
 
 export const initialState: TodoState = {
-    todos: []
+    todos: [],
+    error: null
 };
 
 export const todoReducer = createReducer(
     initialState,
-    on(loadTodosSuccess, (state, { todos }) => ({ ...state, todos })),
-    on(addTodo, (state, { todo }) => ({ ...state, todos: [...state.todos, todo] })),
-    on(updateTodo, (state, { todo }) => ({
+
+    // Load
+    on(TodoActions.loadTodosSuccess, (state, { todos }) => ({
         ...state,
-        todos: state.todos.map(t => t.id === todo.id ? todo : t)
+        todos
     })),
-    on(deleteTodo, (state, { id }) => ({
+    on(TodoActions.loadTodosFailure, (state, { error }) => ({
+        ...state,
+        error
+    })),
+
+    // Create
+    on(TodoActions.createTodoSuccess, (state, { todo }) => ({
+        ...state,
+        todos: [...state.todos, todo]
+    })),
+    on(TodoActions.createTodoFailure, (state, { error }) => ({
+        ...state,
+        error
+    })),
+
+    // Update
+    on(TodoActions.updateTodoSuccess, (state, { todo }) => ({
+        ...state,
+        todos: state.todos.map(t => (t.id === todo.id ? todo : t))
+    })),
+    on(TodoActions.updateTodoFailure, (state, { error }) => ({
+        ...state,
+        error
+    })),
+
+    // Delete
+    on(TodoActions.deleteTodoSuccess, (state, { id }) => ({
         ...state,
         todos: state.todos.filter(t => t.id !== id)
+    })),
+    on(TodoActions.deleteTodoFailure, (state, { error }) => ({
+        ...state,
+        error
     }))
 );

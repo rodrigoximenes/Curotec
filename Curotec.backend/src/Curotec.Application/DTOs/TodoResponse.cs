@@ -4,6 +4,7 @@ namespace Curotec.Application.DTOs
 {
     public record TodoResponse
     {
+        public Guid Id { get; init; }
         public string Title { get; init; }
         public string Description { get; init; }
         public TaskStatusEnum Status { get; init; }

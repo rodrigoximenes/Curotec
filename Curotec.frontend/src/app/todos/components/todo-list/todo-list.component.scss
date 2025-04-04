@@ -1,0 +1,69 @@
+.todo-card {
+    margin: 2rem auto;
+    padding: 1.5rem;
+    max-width: 1000px;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .todo-card mat-card-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #3f51b5;
+  }
+  
+  .todo-table {
+    width: 100%;
+  }
+  
+  
+  .todo-table th {
+    color: #3f51b5;
+    font-weight: 500;
+    padding: 1em;
+    text-align: left;
+  }
+  
+  .todo-table td {
+    padding: 12px;
+    border-bottom: 1px solid #e0e0e0;
+    vertical-align: middle;
+  }
+  
+  .todo-table tr:hover {
+    background-color: #f9f9f9;
+  }
+  
+  button[mat-icon-button] {
+    margin-right: 8px;
+  }
+  
+  .todo-table {
+    width: 100%;
+  
+    th.mat-column-actions,
+    td.mat-column-actions {
+      width: 8em; 
+      text-align: center;
+      padding: 0 8px;
+    }
+
+    th.mat-column-title,
+    td.mat-column-title {
+      width: 18em; 
+      text-align: left;
+      padding: 1em;
+    }
+  
+  
+    th.mat-header-cell, td.mat-cell {
+      white-space: nowrap;
+    }
+  }
+  
+  .actions-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }

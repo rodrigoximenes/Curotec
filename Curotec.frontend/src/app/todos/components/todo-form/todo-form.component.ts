@@ -15,6 +15,8 @@ import { filter, take } from 'rxjs/operators';
 import { TaskPriorityEnum, TaskStatusEnum, Todo } from '../../models/todo.model';
 import { createTodo, updateTodo } from '../../store/todo.actions';
 import { selectTodoById } from '../../store/todo.selectors';
+import { Actions } from '@ngrx/effects';
+import { LoadingService } from '../../../shared/loading/loading.service';
 
 @Component({
   selector: 'app-todo-form',
@@ -40,18 +42,32 @@ export class TodoFormComponent implements OnInit {
   private route = inject(ActivatedRoute);
   public router = inject(Router);
   private snackBar = inject(MatSnackBar);
+  private loadingService = inject(LoadingService);
 
   form!: FormGroup;
   isEdit = false;
   id!: string;
 
-  priorities = Object.keys(TaskPriorityEnum)
-    .filter(key => !isNaN(Number(key)))
-    .map(key => ({ key: Number(key), value: TaskPriorityEnum[key as any] }));
+  readonly statusLabels: { [key: number]: string } = {
+    0: 'Pending',
+    1: 'In Progress',
+    2: 'Completed',
+    3: 'Canceled'
+  };
 
-  statuses = Object.keys(TaskStatusEnum)
-    .filter(key => !isNaN(Number(key)))
-    .map(key => ({ key: Number(key), value: TaskStatusEnum[key as any] }));
+  readonly priorityLabels: { [key: number]: string } = {
+    0: 'Low',
+    1: 'Medium',
+    2: 'High',
+    3: 'Critical'
+  };
+
+  priorities = Object.keys(this.priorityLabels)
+    .map(key => ({ key: Number(key), value: this.priorityLabels[Number(key)] }));
+
+  statuses = Object.keys(this.statusLabels)
+    .map(key => ({ key: Number(key), value: this.statusLabels[Number(key)] }));
+
 
   errorMessages: { [key: string]: string } = {
     title: 'Title is required.',
@@ -61,6 +77,11 @@ export class TodoFormComponent implements OnInit {
   };
 
   ngOnInit(): void {
+    this.initializeForm();
+    this.loadTaskIfEditing();
+  }
+
+  private initializeForm(): void {
     this.form = this.fb.group({
       title: ['', Validators.required],
       description: [''],
@@ -70,22 +91,24 @@ export class TodoFormComponent implements OnInit {
       completionDate: [null],
       assignee: ['', Validators.required]
     });
+  }
 
+  private loadTaskIfEditing(): void {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
-      if (id) {
-        this.isEdit = true;
-        this.id = id;
+      if (!id) return;
 
-        this.store.select(selectTodoById(id)).pipe(
-          filter(todo => !!todo),
-          take(1)
-        ).subscribe(todo => {
-          if (todo) {
-            this.form.patchValue(todo);
-          }
-        });
-      }
+      this.isEdit = true;
+      this.id = id;
+
+      this.store.select(selectTodoById(id)).pipe(
+        filter(todo => !!todo),
+        take(1)
+      ).subscribe(todo => {
+        if (todo) {
+          this.form.patchValue(todo);
+        }
+      });
     });
   }
 
@@ -99,7 +122,7 @@ export class TodoFormComponent implements OnInit {
 
   save(): void {
     if (this.form.invalid) return;
-
+    this.loadingService.show();
     const formValue = this.form.value;
 
     const todo: Todo = {
@@ -120,5 +143,6 @@ export class TodoFormComponent implements OnInit {
 
     this.snackBar.open('Task Saved Successfully!', 'Close', { duration: 3000 });
     this.router.navigate(['/todos']);
+    this.loadingService.hide();
   }
 }

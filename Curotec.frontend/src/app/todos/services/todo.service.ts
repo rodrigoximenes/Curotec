@@ -5,7 +5,7 @@ import { Todo } from '../models/todo.model';
 
 @Injectable({ providedIn: 'root' })
 export class TodoService {
-  private apiUrl = 'https://localhost:7090/api/todo';
+  private apiUrl = 'http://localhost:5000/api/todo';
 
   constructor(private http: HttpClient) { }
 

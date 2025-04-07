@@ -15,6 +15,8 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-d
 import { Todo } from '../../models/todo.model';
 import { deleteTodo, loadTodos } from '../../store/todo.actions';
 import { selectTodos } from '../../store/todo.selectors';
+import { LoadingService } from '../../../shared/loading/loading.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-todo-list',
@@ -32,7 +34,7 @@ import { selectTodos } from '../../store/todo.selectors';
 })
 export class TodoListComponent implements OnInit, OnDestroy {
   todos$!: Observable<Todo[]>;
-  displayedColumns: string[] = ['title', 'description', 'status', 'priority', 'createdAt', 'completionDate', 'actions'];
+  displayedColumns: string[] = ['title', 'description', 'status', 'priority', 'createdAt', 'assignee', 'actions'];
 
   private unsubscribe$ = new Subject<void>();
 
@@ -53,12 +55,16 @@ export class TodoListComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private loadingService: LoadingService,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
+    this.loadingService.show();
     this.todos$ = this.store.select(selectTodos).pipe(takeUntil(this.unsubscribe$));
     this.store.dispatch(loadTodos());
+    this.loadingService.hide();
   }
 
   deleteTodo(id: string): void {
@@ -72,6 +78,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.store.dispatch(deleteTodo({ id }));
+        this.snackBar.open('Task Deleted Successfully!', 'Close', { duration: 3000 });
       }
     });
   }

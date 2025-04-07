@@ -1,55 +1,78 @@
-# Curotec Backend - Setup Guide
+# Curotec - Full Stack Setup Guide (Frontend + Backend + DB via Docker)
 
-This guide provides instructions for running the Curotec backend application both locally and via Docker.
+This guide provides instructions for running the complete Curotec application—frontend, backend, and database—using Docker Compose, along with an option to run only the backend separately.
 
-## Prerequisites
-- Docker and Docker Compose installed
-- .NET SDK 8.0 or higher installed
-- Entity Framework Core CLI installed
+---
 
-## Getting Started
+## ✅ Prerequisites
 
-1. Navigate to the project directory:
-```bash
-cd ./Curotec.backend
-```
+- Docker and Docker Compose installed  
+- .NET SDK 8.0 or higher installed  
+- Entity Framework Core CLI installed (for running migrations)
 
-### 1. Starting Services
-1. Ensure Docker is running.
-2. Start containers using Docker Compose:
-```bash
-docker compose up
-```
+---
 
-### 2. Running Database Migration
-After the containers are running, navigate to the "src" directory to apply database migrations:
-```bash
-cd ./src
+## 🚀 Running Everything (Frontend + Backend + Database)
 
-dotnet ef database update --project ./Curotec.Data/Curotec.Data.csproj --startup-project ./Curotec.WebAPI/Curotec.WebAPI.csproj --configuration Release
-```
+1. Make sure Docker is running.
+2. From the **root project directory** (where the full `docker-compose.yml` is located), run:
 
-### 3. Running Locally
-To run the application locally, follow these steps:
-1. Ensure the SQL Server container is running (e.g., via Docker Compose).
-2. Run the application using Visual Studio or the CLI:
-   - Using Visual Studio: Open the solution and run the project.
-   - Using CLI:
    ```bash
-   dotnet run --project ./Curotec.WebAPI/Curotec.WebAPI.csproj
+   docker compose up --build
    ```
-3. Access the application at: [https://localhost:7090/swagger/index.html](https://localhost:7090/swagger/index.html)
 
-### 4. Running via Docker
-Access the application via Docker at:
-- [http://localhost:5000/swagger/index.html](http://localhost:5000/swagger/index.html)
+3. Access the application:
 
-## Important Notes
-- Ensure the database container is running before applying migrations.
-- Both local and Dockerized setups connect to the same SQL Server database.
-- Migrations cannot be run before starting the database container.
-- Always run the migration from the "src" directory.
-- Both environments are sharing the same SQL Server database container.
+   - Frontend: [http://localhost:4200](http://localhost:4200)  
+   - Backend (Swagger): [http://localhost:5000/swagger/index.html](http://localhost:5000/swagger/index.html)
 
-You're all set to explore the Curotec API! 🚀
+4. After all containers are up, run the database migration:
 
+   ```bash
+   cd ./Curotec.backend/src
+
+   dotnet ef database update --project ./Curotec.Data/Curotec.Data.csproj --startup-project ./Curotec.WebAPI/Curotec.WebAPI.csproj --configuration Release
+   ```
+
+---
+
+## 🛠️ Running Only the Backend (with Database)
+
+To run only the backend and the SQL Server container:
+
+1. Navigate to the backend directory:
+
+   ```bash
+   cd ./Curotec.backend
+   ```
+
+2. Start services using Docker Compose:
+
+   ```bash
+   docker compose up --build
+   ```
+
+3. Access the API:
+
+   - [http://localhost:5000/swagger/index.html](http://localhost:5000/swagger/index.html)
+
+4. Apply the database migration as before:
+
+   ```bash
+   cd ./src
+
+   dotnet ef database update --project ./Curotec.Data/Curotec.Data.csproj --startup-project ./Curotec.WebAPI/Curotec.WebAPI.csproj --configuration Release
+   ```
+
+---
+
+## 💡 Notes
+
+- The database must be running before applying migrations.
+- Always run migrations from the `Curotec.backend/src` directory.
+- The frontend is served by NGINX and available at port `4200`.
+- Both frontend and backend communicate via `localhost` during development.
+
+---
+
+You're now ready to run and explore the full Curotec stack with Docker! 🐳✨
